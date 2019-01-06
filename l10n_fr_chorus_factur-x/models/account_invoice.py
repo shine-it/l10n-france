@@ -31,8 +31,9 @@ class AccountInvoice(models.Model):
         elif chorus_invoice_format == 'pdf_factur-x':
             # deposerFlux works in Factur-X for single invoice,
             # but not in multi-invoice with tarball
-            chorus_file_content, filetype = self.env['ir.actions.report.xml'].\
-                render_report(self.ids, 'account.report_invoice', {})
+            report_invoice = self.env.ref('account.account_invoices')
+            chorus_file_content, filetype = report_invoice.render(
+                self.ids, {})
             assert filetype == 'pdf', 'wrong filetype'
         else:
             chorus_file_content = super(AccountInvoice, self).\
